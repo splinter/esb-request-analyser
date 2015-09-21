@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <title>{{title }}</title>
+        <link rel="stylesheet" href="/css/style.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+        {{#if ENV_DEVELOPMENT}}
+        <script src="http://localhost:35729/livereload.js"></script>
+        {{/if}}
+        <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+        <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+        <script>
+                var socket = io();
+                var buildMessage = function(r){
+                var id = r.id;
+                var title = r.messages[0].content.content;
+                return '<div class="list-group" id="'+id+'" >'+
+                '<a><h4>'+title+'</h4></a>' +
+                '</div>';
+                };
+                var requestMap = {};
+                socket.on('chat message', function(msg){
+                    console.log('message: ' + msg);
+                    var  l = JSON.parse(msg);
+
+                    if(l.length>0) {
+                    	for(var index = 0; index < l.length; index++){
+                    		requestMap[l[index].id] = l[index];
+                    		$('#req-list').append(buildMessage(l[index]));
+                    		$('#'+l[index].id).on('click',function(){
+                    			console.log(requestMap[this.id]);
+                    			$('#req-viewer').html(JSON.stringify(requestMap[this.id]));
+                    		});
+                    	}
+                        
+                    }
+                });
+        </script>
+    </head>
+    <body>
+        <div class='row'>
+            <div id='req-list' class='col-md-4'>
+                <!--div class='list-group' >
+                    <a href="#" class="list-group-item active">
+                    <h4 class="list-group-item-heading">List group item heading</h4>
+                    <p class="list-group-item-text">...</p>
+                    </a>
+                </div-->
+            </div>
+            <div id='req-viewer' class='col-md-8'>
+            	View the request here!
+            </div>
+        </div>
+        {{{body}}}
+    </body>
+</html>
