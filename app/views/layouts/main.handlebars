@@ -16,9 +16,9 @@
                 var buildMessage = function(r){
                 var id = r.id;
                 var title = r.messages[0].content.content;
-                return '<div class="list-group" id="'+id+'" >'+
-                '<a><h4>'+title+'</h4></a>' +
-                '</div>';
+                return '<a class="list-group-item" id="'+id+'" >'+
+                '<h4>'+title+'</h4><p>'+r.messages[0].timeStamp+'</p>' +
+                '</a>';
                 };
                 var requestMap = {};
                 socket.on('chat message', function(msg){
@@ -31,7 +31,7 @@
                     		$('#req-list').append(buildMessage(l[index]));
                     		$('#'+l[index].id).on('click',function(){
                     			console.log(requestMap[this.id]);
-                    			$('#req-viewer').html(JSON.stringify(requestMap[this.id]));
+                    			$('#req-viewer').val(requestMap[this.id].str);
                     		});
                     	}
                         
@@ -41,7 +41,7 @@
     </head>
     <body>
         <div class='row'>
-            <div id='req-list' class='col-md-4'>
+            <div id='req-list' class='list-group col-md-4'>
                 <!--div class='list-group' >
                     <a href="#" class="list-group-item active">
                     <h4 class="list-group-item-heading">List group item heading</h4>
@@ -49,9 +49,9 @@
                     </a>
                 </div-->
             </div>
-            <div id='req-viewer' class='col-md-8'>
+            <textarea id='req-viewer' class='col-md-8' style="height:900px">
             	View the request here!
-            </div>
+            </textarea>
         </div>
         {{{body}}}
     </body>

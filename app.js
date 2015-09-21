@@ -51,6 +51,8 @@ setInterval(function(){
 	for(var index = 0; index <  requests.length; index++){
 		requestList.push(requests[index]);
 	}
+	//console.log('sending ');
+	//console.log(requests);
 	io.emit('chat message',JSON.stringify(requests));
 	//console.log('Total requests: '+requestList.length);
 },1000);
